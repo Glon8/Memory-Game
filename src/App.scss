@@ -1,0 +1,298 @@
+.w-view-f {
+    width: 100vw;
+}
+
+.h-view-f {
+    height: 100vh;
+}
+
+$pixel: 5px;
+$percent: 5%;
+
+$pos: (
+    absolute,
+    relative,
+    fixed,
+    sticky,
+    static
+);
+
+$fonts: (
+    (name: 'qilka-bold',
+        dest: 'Qilka-Bold\ copy.otf',
+        format: 'opentype'),
+    (name: 'beachday',
+        dest: 'beachday.otf',
+        format: 'opentype'),
+    (name: 'beachday-true',
+        dest: 'beachday.ttf',
+        format: 'truetype'),
+    (name: 'tufuli',
+        dest: 'TufuliArabicDEMO-Regular.otf',
+        format: 'opentype'),
+    (name: 'tufuli-bold',
+        dest: 'TufuliArabicDEMO-Bold.otf',
+        format: 'opentype')
+);
+
+$colors: (
+    light-red: #E26858,
+    red: #E93C35,
+    dark-red: #6E022F,
+    blue: #499BED,
+    yellow: #FEE16C,
+    green: #729969,
+    light: #FAFAFA,
+    dark: #102020,
+    light-purple: #B25ECF,
+    purple: #722BA0,
+    dark-purple: #342756,
+    brown: #86612F,
+    dark-gray: #B9C7D2,
+    gray: #D0D2CF,
+    light-gray: #E0E7F0,
+);
+
+$border-corns: (
+    tl: top-left,
+    tr: top-right,
+    bl: bottom-left,
+    br: bottom-right,
+    l: (top-left, bottom-left),
+    r: (top-right, bottom-right),
+    t: (top-left, top-right),
+    b:(bottom-left, bottom-right)
+);
+
+$pos-ver: (
+    s: start,
+    e: end,
+    c: center
+);
+
+$pos-hor: (
+    l: left,
+    r: right,
+    c: center
+);
+
+$just-ali: (
+    content,
+    self,
+    items
+);
+
+$borders: (
+    solid,
+    dotted,
+    dashed,
+    none
+);
+
+$directions: (
+    t: top,
+    b: bottom,
+    r: right,
+    l: left,
+    x: (left, right),
+    y: (top, bottom)
+);
+
+$text-deco: (
+    none,
+    solid,
+    wavy,
+    dotted,
+    dashed
+);
+
+$displays: (
+    flex,
+    none,
+    block,
+    grid
+);
+
+$flex-dir: (
+    column,
+    row,
+    column-reverse,
+    row-reverse
+);
+
+@for $ind from 0 to 10 {
+    .r-#{$ind} {
+        border-radius: calc($ind * $pixel);
+    }
+
+    .m-#{$ind} {
+        margin: calc($ind * $pixel);
+    }
+
+    .p-#{$ind} {
+        padding: calc($ind * $pixel);
+    }
+
+    .b-w-#{$ind} {
+        border-width: calc($ind * 1px);
+    }
+
+    @each $dir, $props in $directions {
+        @each $prop in $props {
+            .m#{$dir}-#{$ind} {
+                margin-#{$prop}: calc($ind * $pixel);
+            }
+
+            .p#{$dir}-#{$ind} {
+                padding-#{$prop}: calc($ind * $pixel);
+            }
+
+            .b#{$dir}-w-#{$ind} {
+                border-#{$prop}-width: calc($ind * 1px);
+            }
+        }
+    }
+
+    @each $key, $corners in $border-corns {
+        @each $corn in $corners {
+            .r#{$key}-#{$ind} {
+                border-#{$corn}-radius: calc($ind * $pixel);
+            }
+        }
+    }
+}
+
+@each $font in $fonts {
+    $name: #{map-get($font, name)};
+
+    @font-face {
+        font-family: $name;
+        src: url('./fonts/#{map-get($font, dest)}') format('#{map-get($font, format)}');
+    }
+
+    .font-#{$name} {
+        font-family: $name;
+    }
+}
+
+@each $key, $col in $colors {
+    .bg-c-#{$key} {
+        background-color: $col;
+    }
+
+    .c-#{$key} {
+        color: $col;
+    }
+
+    .b-c-#{$key} {
+        border-color: $col;
+    }
+
+    @each $dir, $props in $directions {
+        @each $prop in $props {
+            .b#{$dir}-c-#{$key} {
+                border-#{$prop}-color: $col;
+            }
+        }
+    }
+}
+
+@each $key, $pos in $pos-hor {
+    .t-a-#{key} {
+        text-align: $pos;
+    }
+
+    @each $filter in $just-ali {
+        .j-#{$filter}-#{$key} {
+            justify-#{$filter}: $pos;
+        }
+    }
+}
+
+@each $key, $pos in $pos-ver {
+    @each $filter in $just-ali {
+        .a-#{$filter}-#{$key} {
+            align-#{$filter}: $pos;
+        }
+    }
+}
+
+@each $key in $borders {
+    .b-#{$key} {
+        border-style: $key;
+    }
+
+    @each $dir, $props in $directions {
+        @each $prop in $props {
+            .b#{$dir}-#{$key} {
+                border-#{$prop}-style: $key;
+            }
+        }
+    }
+}
+
+@each $key in $displays {
+    .#{$key} {
+        display: $key;
+    }
+}
+
+@each $key in $flex-dir {
+    .f-#{$key} {
+        flex-direction: $key;
+    }
+}
+
+@for $ind from 0 to 21 {
+    .w-per-#{$ind} {
+        width: calc($ind * $percent);
+    }
+
+    .w-fix-#{$ind} {
+        width: calc($ind * 1rem);
+    }
+
+    .h-per-#{$ind} {
+        height: calc($ind * $percent);
+    }
+
+    .h-fix-#{$ind} {
+        height: calc($ind * 1rem);
+    }
+
+    .o-#{$ind} {
+        opacity: calc($ind * $percent);
+    }
+
+    .f-s-#{$ind} {
+        font-size: calc($pixel * $ind);
+    }
+}
+
+@each $key in $text-deco {
+    .t-d-#{$key} {
+        text-decoration: $key;
+    }
+}
+
+@each $prop in $pos {
+    .#{$prop} {
+        position: $prop;
+    }
+}
+
+@each $key, $prop in $directions {
+    @for $i from 0 to 10 {
+        @if $key !=x and $key !=y {
+            .#{$prop}-#{$i} {
+                #{$prop}: $pixel * $i;
+            }
+        }
+    }
+}
+
+@for $ind from 1 to 10 {
+    .f-w-#{$ind} {
+        font-weight: $ind * 100;
+    }
+}
