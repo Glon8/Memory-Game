@@ -244,6 +244,22 @@ $flex-dir: (
 }
 
 @for $ind from 0 to 21 {
+    .max-w-#{$ind} {
+        max-width: calc($ind * $percent);
+    }
+
+    .min-w-#{$ind} {
+        min-width: calc($ind * $percent);
+    }
+
+    .max-h-#{$ind} {
+        max-height: calc($ind * $percent);
+    }
+
+    .min-h-#{$ind} {
+        min-height: clac($ind * $percent);
+    }
+
     .w-per-#{$ind} {
         width: calc($ind * $percent);
     }
