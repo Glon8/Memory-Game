@@ -13,8 +13,8 @@ function App() {
 
     <div className='w-per-8 flex h-fix-3 mb-5'>
 
-      <TitleTab f={'qilka-bold'} f_s={8} c={'dark-green'} cus={`w-per-17 flex a-items-c pr-5`} m={'m-0'} value={'Memory-Game'} />
-      <Button f={'qilka-bold'} c={'light'} bg_c={'dark-red'} b_c={'dark-red'}  r={'r-3'} w={`w-per-3`} h={'h-per-20'} value={'Restart'} />
+      <TitleTab f_s={8} c={'dark-green'} cus={`w-per-17 flex a-items-c pr-5`} m={'m-0'} value={'Memory-Game'} />
+      <Button c={'light'} bg_c={'dark-red'} b_c={'dark-red'}  r={'r-3'} w={`w-per-3`} h={'h-per-20'} value={'Restart'} />
 
     </div>
 
