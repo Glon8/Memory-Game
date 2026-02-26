@@ -38,19 +38,30 @@ $fonts: (
 $colors: (
     light-red: #E26858,
     red: #E93C35,
-    dark-red: #6E022F,
+    dark-red: #A23D01,
+    dark-orange: #B55E28,
+    dirty-light-orange: #D2A16E,
+    light-orange: #F8DAB2,
+    dark-pink: #6E022F,
+    dirty-dark-blue: #486B85,
     blue: #499BED,
+    light-blue: #9ecfe7,
+    dirty-light-blue: #93B4BC,
     yellow: #FEE16C,
     green: #729969,
+    very-dark-green: #22352C,
     light: #FAFAFA,
     dark: #102020,
     light-purple: #B25ECF,
     purple: #722BA0,
     dark-purple: #342756,
+    dark-brown: #3F2512,
     brown: #86612F,
+    light-brown: #BD7F01,
     dark-gray: #B9C7D2,
     gray: #D0D2CF,
     light-gray: #E0E7F0,
+    granite: #4b5354,
 );
 
 $border-corns: (
@@ -170,7 +181,7 @@ $flex-dir: (
         src: url('./fonts/#{map-get($font, dest)}') format('#{map-get($font, format)}');
     }
 
-    .font-#{$name} {
+    .f-#{$name} {
         font-family: $name;
     }
 }
@@ -310,5 +321,35 @@ $flex-dir: (
 @for $ind from 1 to 10 {
     .f-w-#{$ind} {
         font-weight: $ind * 100;
+    }
+
+    .g-#{$ind} {
+        gap: $ind * $pixel;
+    }
+
+    .r-g-#{$ind} {
+        row-gap: $ind * $pixel;
+    }
+
+    .c-g-#{$ind} {
+        column-gap: $ind * $pixel;
+    }
+
+    @for $ind_2 from 1 to 21 {
+        .grid-t-r-#{$ind}-fix-#{$ind_2} {
+            grid-template-rows: repeat($ind, $ind_2 * 1rem);
+        }
+
+        .grid-t-r-#{$ind}-per-#{$ind_2} {
+            grid-template-rows: repeat($ind, $ind_2 * $percent);
+        }
+
+        .grid-t-c-#{$ind}-fix-#{$ind_2} {
+            grid-template-columns: repeat($ind, $ind_2 * 1rem);
+        }
+
+        .grid-t-c-#{$ind}-per-#{$ind_2} {
+            grid-template-columns: repeat($ind, $ind_2 * $percent);
+        }
     }
 }
