@@ -1,20 +1,17 @@
-import { useState } from 'react'
-
 import TitleTab from './TitleTab'
 
-function Card({ id_card, asClick }) {
-    const [useFlipped, setFlipped] = useState(false);
+function Card({ card_info, asClick, onFlip }) {
+    return (<div className={`w-per-20 h-per-20 r-1 bg-c-${card_info.face_up ? 'light-yellow' : 'yellow'} flex a-items-c j-content-c relative`} >
 
-    return (<div className={`w-per-20 h-per-20 r-1 bg-c-${useFlipped ? 'light-yellow' : 'yellow'} flex a-items-c j-content-c relative`} >
-
-        <img className='absolute' hidden={useFlipped ? false : true} src={id_card?.img} alt='Cards Front Image' />
-        <TitleTab m={'m-0'} cus={`absolute flex j-content-c ${useFlipped ? 'none' : ''}`} f_s={10} value={'\u{2753}'} />
+        <img className='absolute' hidden={card_info.face_up ? false : true} src={card_info?.img} alt='Cards Front Image' />
+        <TitleTab m={'m-0'} cus={`absolute flex j-content-c ${card_info.face_up ? 'none' : ''}`} f_s={10} value={'\u{2753}'} />
         <a href='#' className={`o-20 absolute w-per-20 h-per-20 top-0 left-0`}
             onClick={(e) => {
                 e.preventDefault();
 
-                setFlipped(!useFlipped);
-                asClick?.(id_card?.id ?? -1);
+                onFlip?.();
+
+                asClick?.(card_info?.id ?? -1);
             }}></a>
 
     </div>)
