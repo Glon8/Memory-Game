@@ -9,9 +9,11 @@ function Card({ card_info, asClick, onFlip }) {
             onClick={(e) => {
                 e.preventDefault();
 
+                if (card_info?.disabled) return;
+
                 onFlip?.();
 
-                asClick?.(card_info?.id ?? -1);
+                asClick?.(card_info ?? -1);
             }}></a>
 
     </div>)

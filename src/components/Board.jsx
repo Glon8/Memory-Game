@@ -14,17 +14,19 @@ import Ru from '../images/Rust.logo.webp'
 
 function Board({ asRefresh }) {
     const images = [C, CSh, CPl, Html, Java, JS, Php, Py, Ru];
-    const choosen_list = [];
 
     const [useCards, setCards] = useState([]);
 
     const cards = useRef([]);
+    const choosen_list = useRef([]);
 
-    const flip_card = (ind) => {
+    const value_flip = (ind, value_name) => {
+        if (!useCards[ind]) return;
+
         setCards(prev => {
             const new_cards = [...prev];
 
-            new_cards[ind] = { ...new_cards[ind], face_up: !new_cards[ind].face_up };
+            new_cards[ind] = { ...new_cards[ind], [value_name]: !new_cards[ind][value_name] };
 
             return new_cards;
         });
@@ -45,7 +47,8 @@ function Board({ asRefresh }) {
                     img: img_copy[ind],
                     ind: index,
                     id: ind,
-                    face_up: false
+                    face_up: false,
+                    disabled: false
                 });
 
                 index += 1
@@ -56,6 +59,35 @@ function Board({ asRefresh }) {
     }
 
     const shuffle = (array) => array.sort(() => Math.random() - 0.5);
+
+    const on_card_click = (res) => {
+        choosen_list.current.push(res);
+
+        console.log('Entering in to check is ' + Boolean(choosen_list.current.length == 2));
+        console.log(choosen_list.current);
+
+        if (choosen_list.current.length == 2) {
+            const [first, second] = choosen_list.current;
+
+            console.log('first');
+            console.log(first);
+            console.log('second');
+            console.log(second);
+
+            if (first.ind != second.ind && first.id == second.id) {
+                console.log('No flags triggered, cards must be locked!');
+                value_flip(first.ind, 'disabled');
+                value_flip(second.ind, 'disabled');
+            }
+            else {
+                console.log('Flags has been triggered, cards wont be locked!');
+                value_flip(first.ind, 'face_up');
+                value_flip(second.ind, 'face_up');
+            }
+
+            choosen_list.current = [];
+        }
+    }
 
     useEffect(() => {
         make_game_pile();
@@ -74,7 +106,9 @@ function Board({ asRefresh }) {
     return (<div className='w-per-7 h-per-16 bg-c-light-brown r-2 b-solid b-w-1 b-c-gray grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c'>
         {
             useCards?.map((card_info, ind) => {
-                return <Card key={ind} card_info={card_info} asClick={(res) => choosen_list.push(res)} onFlip={() => flip_card(ind)} />
+                return <Card key={ind} card_info={card_info}
+                    asClick={on_card_click}
+                    onFlip={() => value_flip(ind, 'face_up')} />
             })
         }
     </div>)
