@@ -13,13 +13,14 @@ import Php from '../images/PHP.logo.webp'
 import Py from '../images/Python.logo.webp'
 import Ru from '../images/Rust.logo.webp'
 
-function Board({ asRefresh }) {
+function Board({ asRefresh, toRefresh }) {
     const debug = true;
 
     const images = [C, CSh, CPl, Html, Java, JS, Php, Py, Ru];
 
     const [useCards, setCards] = useState([]);
-    const [useFinish, setFinish] = useState(true);
+    const [useLock, setLock] = useState(true);
+    const [useFinish, setFinish] = useState(false);
 
     const cards = useRef([]);
     const choosen = useRef([]);
@@ -84,12 +85,18 @@ function Board({ asRefresh }) {
         return new_pile;
     }
 
-    const check_all_found = () => {
-        useCards.forEach((item) => {
-            if (!item.face_up) return false;
-        });
-
-        return true;
+    const finished = () => {
+        const finish = useCards.every((item) => item.face_up);
+        // debug prints
+        if (debug) {
+            console.log('>==============Finish Check==============<')
+            console.log(useCards);
+            console.log('Finish flag is ' + finish);
+            if (finish) console.log('USER WON');
+            else console.log('User still didnt finished!');
+        }
+        // check if all the gards are fliped up > if true, show the pop-up > else, nothing
+        if (finish) setTimeout(() => { setFinish(true); }, 500);
     }
 
     const on_card_click = (res) => {
@@ -121,15 +128,6 @@ function Board({ asRefresh }) {
             });
             // erase choosen cards
             choosen.current = [];
-
-            const finished = check_all_found();
-            // check if all the gards are fliped up > if true, show the pop-up > else, nothing
-            if (finished) {
-                // debug prints
-                if (debug) console.log('USER WON!');
-
-                setTimeout(() => { }, 500);
-            }
         }
     }
 
@@ -142,10 +140,17 @@ function Board({ asRefresh }) {
     useEffect(() => {
         cards.current = [];
 
+        setFinish(false);
+
         make_game_pile();
 
         setCards(shuffle(cards.current));
     }, [asRefresh]);
+
+    useEffect(() => {
+        if (!useLock) finished();
+        else setLock(false);
+    }, [useCards]);
 
     return (<div className='w-per-7 h-per-16 bg-c-light-brown r-2 b-solid b-w-1 b-c-gray grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c relative'>
         {
@@ -157,7 +162,7 @@ function Board({ asRefresh }) {
         }
 
 
-        <PopUp visible={useFinish} />
+        <PopUp visible={useFinish} asClick={() => toRefresh?.()} />
     </div>)
 }
 

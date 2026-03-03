@@ -21,7 +21,7 @@ function App() {
         asClick={() => setRefresh(!useRefresh)} />
 
     </div>
-    <Board asRefresh={useRefresh} />
+    <Board asRefresh={useRefresh} toRefresh={() => setRefresh(!useRefresh)} />
     <TitleTab f={'tufuli'} f_s={3} c={'very-dark-green'} cus={`w-per-2 flex a-items-c j-content-c pr-5 bb-dashed bb-w-1 bb-c-very-dark-green`} m={'mx-0 mt-5'} value={'Made by Demon_Ruz'} />
 
   </div>)
