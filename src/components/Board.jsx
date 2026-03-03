@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import Card from './Card'
 
@@ -20,44 +20,49 @@ function Board({ asRefresh }) {
     const [useCards, setCards] = useState([]);
 
     const cards = useRef([]);
-    const choosen_list = useRef([]);
+    const choosen = useRef([]);
 
     const value_flip = (ind, value_name) => {
+        // check on index existing
         if (!useCards[ind]) return;
-
-        console.log('flipping values');
+        // debug prints
+        if (debug) console.log('flipping values');
 
         setCards(prev => {
+            // copying previous array
             const new_cards = [...prev];
-
+            // mutate copied array
             new_cards[ind] = { ...new_cards[ind], [value_name]: !new_cards[ind][value_name] };
-
+            // re-assign
             return new_cards;
         });
     }
 
     const make_game_pile = () => {
+        // copy of the images array to work with
         const img_copy = [...images];
-
-        let quota = 0;
+        // fake cards id
+        let fake_id = 99;
 
         while (cards.current.length < 16) {
-            const ind = Math.floor(Math.random() * img_copy.length);
-            quota += 2;
-
+            // generating a random image
+            let ind = Math.floor(Math.random() * img_copy.length);
+            //generating fake id
+            fake_id -= 2;
+            // assigning image & id to pair of cards
             for (let i = 0; i < 2; i++) {
                 cards.current.push({
                     img: img_copy[ind],
                     ind: -1,
-                    id: ind,
+                    id: fake_id,
                     face_up: false,
                     disabled: false
                 });
             }
-
+            // pulling out used image out of list
             img_copy.splice(ind, 1);
         }
-
+        // debug prints
         if (debug) {
             console.log('GAME PILE:');
             console.log(cards.current);
@@ -65,47 +70,48 @@ function Board({ asRefresh }) {
     }
 
     const shuffle = (array) => {
+        // shuffle cards
         array.sort(() => Math.random() - 0.5);
-
+        // re-indexing
         const new_pile = array.map((element, index) => ({ ...element, ind: index }));
-
+        // debug prints
         if (debug) {
             console.log('SHUFFLE:');
             console.log(new_pile);
         }
-
         return new_pile;
     }
 
     const on_card_click = (res) => {
-        if (choosen_list.current.length != 0) {
-            let flag = true;
-
-            choosen_list.current.forEach((item) => { if (flag) flag = item.ind != res.ind });
-
-            if (flag) choosen_list.current.push(res);
+        // check for the same card click > if the same card, do nothing > else push in to choosen
+        if (choosen.current.length != 0) {
+            for (let i = 0; i < choosen.current.length; i++)
+                if (choosen.current[i].ind != res.ind) { choosen.current.push(res); break; }
         }
-        else choosen_list.current.push(res);
-
+        else choosen.current.push(res);
+        // debug prints
         if (debug) {
-            console.log('Entering in to check is ' + Boolean(choosen_list.current.length == 2));
-            console.log(choosen_list.current);
+            console.log('Entering in to check is ' + Boolean(choosen.current.length == 2));
+            console.log(choosen.current);
         }
 
-        if (choosen_list.current.length == 2) {
-            const [first, second] = choosen_list.current;
-
+        if (choosen.current.length == 2) {
+            // "unpacking"
+            const [first, second] = choosen.current;
+            // debug prints
             if (debug) {
                 if (first.ind != second.ind && first.id == second.id) console.log('No flags has been triggered, cards must be locked!');
                 else console.log('Flags has been triggered, cards wont be locked!');
             }
-
-            choosen_list.current.forEach((card) => {
+            // check for choosen cards > if indexes differ AND they share the same id, disable both > else, flip the cards back down
+            choosen.current.forEach((card) => {
                 if (first.ind != second.ind && first.id == second.id) value_flip(card.ind, 'disabled');
                 else value_flip(card.ind, 'face_up');
             });
+            // erase choosen cards
+            choosen.current = [];
 
-            choosen_list.current = [];
+            // <============================ ADD AN ENDGAME POP-UP LOGIC
         }
     }
 
