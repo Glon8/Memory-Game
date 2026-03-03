@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import Card from './Card'
+import PopUp from './PopUp'
 
 import C from '../images/C.logo.webp'
 import CSh from '../images/CSh.logo.webp'
@@ -18,6 +19,7 @@ function Board({ asRefresh }) {
     const images = [C, CSh, CPl, Html, Java, JS, Php, Py, Ru];
 
     const [useCards, setCards] = useState([]);
+    const [useFinish, setFinish] = useState(true);
 
     const cards = useRef([]);
     const choosen = useRef([]);
@@ -82,12 +84,21 @@ function Board({ asRefresh }) {
         return new_pile;
     }
 
+    const check_all_found = () => {
+        useCards.forEach((item) => {
+            if (!item.face_up) return false;
+        });
+
+        return true;
+    }
+
     const on_card_click = (res) => {
-        // check for the same card click > if the same card, do nothing > else push in to choosen
+        // check for the same card click > if the same card, do nothing > if length > 2, do nothing > else push in to choosen
         if (choosen.current.length != 0) {
             for (let i = 0; i < choosen.current.length; i++)
                 if (choosen.current[i].ind != res.ind) { choosen.current.push(res); break; }
         }
+        else if (choosen.current.length > 2) return;
         else choosen.current.push(res);
         // debug prints
         if (debug) {
@@ -106,12 +117,19 @@ function Board({ asRefresh }) {
             // check for choosen cards > if indexes differ AND they share the same id, disable both > else, flip the cards back down
             choosen.current.forEach((card) => {
                 if (first.ind != second.ind && first.id == second.id) value_flip(card.ind, 'disabled');
-                else value_flip(card.ind, 'face_up');
+                else setTimeout(() => value_flip(card.ind, 'face_up'), 900);
             });
             // erase choosen cards
             choosen.current = [];
 
-            // <============================ ADD AN ENDGAME POP-UP LOGIC
+            const finished = check_all_found();
+            // check if all the gards are fliped up > if true, show the pop-up > else, nothing
+            if (finished) {
+                // debug prints
+                if (debug) console.log('USER WON!');
+
+                setTimeout(() => { }, 500);
+            }
         }
     }
 
@@ -129,7 +147,7 @@ function Board({ asRefresh }) {
         setCards(shuffle(cards.current));
     }, [asRefresh]);
 
-    return (<div className='w-per-7 h-per-16 bg-c-light-brown r-2 b-solid b-w-1 b-c-gray grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c'>
+    return (<div className='w-per-7 h-per-16 bg-c-light-brown r-2 b-solid b-w-1 b-c-gray grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c relative'>
         {
             useCards?.map((card_info, ind) => {
                 return <Card key={ind} card_info={card_info}
@@ -137,6 +155,9 @@ function Board({ asRefresh }) {
                     onFlip={() => value_flip(ind, 'face_up')} />
             })
         }
+
+
+        <PopUp visible={useFinish} />
     </div>)
 }
 

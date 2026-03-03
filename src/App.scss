@@ -49,7 +49,11 @@ $colors: (
     dirty-light-blue: #93B4BC,
     yellow: #FEE16C,
     light-yellow: #FDFEE8,
-    green: #729969,
+    dirty-light-green: #cbd18b,
+    light-green: #d6f58e,
+    dirty-green: #729969,
+    green: #82b21e,
+    mint-green: #82b088,
     very-dark-green: #22352C,
     light: #FAFAFA,
     dark: #102020,
@@ -310,10 +314,10 @@ $flex-dir: (
 }
 
 @each $key, $prop in $directions {
-    @for $i from 0 to 10 {
+    @for $i from 0 to 21 {
         @if $key !=x and $key !=y {
             .#{$prop}-#{$i} {
-                #{$prop}: $pixel * $i;
+                #{$prop}: $percent * $i;
             }
         }
     }
