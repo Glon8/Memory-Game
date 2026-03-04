@@ -1,21 +1,5 @@
-.w-view-f {
-    width: 100vw;
-}
-
-.h-view-f {
-    height: 100vh;
-}
-
 $pixel: 5px;
 $percent: 5%;
-
-$pos: (
-    absolute,
-    relative,
-    fixed,
-    sticky,
-    static
-);
 
 $fonts: (
     (name: 'qilka-bold',
@@ -36,37 +20,37 @@ $fonts: (
 );
 
 $colors: (
-    light-red: #E26858,
-    red: #E93C35,
     dark-red: #A23D01,
-    dark-orange: #B55E28,
-    dirty-light-orange: #D2A16E,
-    light-orange: #F8DAB2,
-    dark-pink: #6E022F,
-    dirty-dark-blue: #486B85,
-    blue: #499BED,
     light-blue: #9ecfe7,
-    dirty-light-blue: #93B4BC,
-    yellow: #FEE16C,
     light-yellow: #FDFEE8,
-    dirty-light-green: #cbd18b,
-    light-green: #d6f58e,
-    dirty-green: #729969,
-    green: #82b21e,
+    yellow: #FEE16C,
     mint-green: #82b088,
     very-dark-green: #22352C,
     light: #FAFAFA,
     dark: #102020,
-    light-purple: #B25ECF,
-    purple: #722BA0,
-    dark-purple: #342756,
-    dark-brown: #3F2512,
-    brown: #86612F,
     light-brown: #BD7F01,
-    dark-gray: #B9C7D2,
-    gray: #D0D2CF,
-    light-gray: #E0E7F0,
-    granite: #4b5354,
+);
+
+$breakpoints: (
+    sm: 425px,
+    md: 768px,
+    lg: 1024px,
+);
+
+.w-view-f {
+    width: 100vw;
+}
+
+.h-view-f {
+    height: 100vh;
+}
+
+$pos: (
+    absolute,
+    relative,
+    fixed,
+    sticky,
+    static
 );
 
 $border-corns: (
@@ -280,12 +264,28 @@ $flex-dir: (
         width: calc($ind * $percent);
     }
 
+    @each $key, $value in $breakpoints {
+        @media (max-width: $value) {
+            .w-per-#{$ind}-#{$key} {
+                width: calc($ind * $percent);
+            }
+        }
+    }
+
     .w-fix-#{$ind} {
         width: calc($ind * 1rem);
     }
 
     .h-per-#{$ind} {
         height: calc($ind * $percent);
+    }
+
+    @each $key, $value in $breakpoints {
+        @media (max-width: $value) {
+            .h-per-#{$ind}-#{$key} {
+                height: calc($ind * $percent);
+            }
+        }
     }
 
     .h-fix-#{$ind} {

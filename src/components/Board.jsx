@@ -14,7 +14,7 @@ import Py from '../images/Python.logo.webp'
 import Ru from '../images/Rust.logo.webp'
 
 function Board({ asRefresh, toRefresh }) {
-    const debug = true;
+    const debug = false;
 
     const images = [C, CSh, CPl, Html, Java, JS, Php, Py, Ru];
 
@@ -152,7 +152,7 @@ function Board({ asRefresh, toRefresh }) {
         else setLock(false);
     }, [useCards]);
 
-    return (<div className='w-per-7 h-per-16 bg-c-light-brown r-2 b-solid b-w-1 b-c-gray grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c relative'>
+    return (<div className='w-per-7 w-per-17-sm w-per-14-md w-per-11-lg h-per-16 bg-c-light-brown r-2 grid grid-t-c-4-per-4 r-g-2 c-g-6 p-3 j-content-c relative'>
         {
             useCards?.map((card_info, ind) => {
                 return <Card key={ind} card_info={card_info}
